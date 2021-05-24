@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <title>Epic Button Game</title>
+        <script>
+            $(document).ready(function(){
+                var socket = io();
+                /* When submit button is clicked */
+                $('.btn').click(function(){
+                    let new_color = $(this).attr('id'); // Just for this assignment, I use the attr 'id' to store the color and at the same time use for styling
+                    socket.emit('update_color', {color: new_color});
+                    return false; // Prevents page from redirecting
+                });
+                /* Socket IO listener */
+                socket.on('updated_color', function(res){
+                    /* if successfully passed the data from server to client */
+                    if(res){
+                        $('body').css('background-color', res.color);
+                    }else{
+                        alert("Unable to update client");
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="main-container">
+            <a class="btn" id="green">Green</a>
+            <a class="btn" id="blue">Blue</a>
+            <a class="btn" id="pink">Pink</a>
+        </div>
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</html>
